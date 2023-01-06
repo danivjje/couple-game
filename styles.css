@@ -1,0 +1,42 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.card-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.card {
+    border: none;
+    height: 20vh;
+    cursor: pointer;
+    margin-bottom: 20px;
+    border-radius: 25px;
+    background-color: brown;
+    display: flex;
+    flex-basis: 25%;
+    justify-content: center;
+    align-items: center;
+    color: aliceblue;
+    font-family: sans-serif;
+    font-size: 120px;
+    font-weight: 600;
+    transition: transform 100ms ease-in-out;
+}
+
+.card:not(:nth-child(4n)) {
+    flex: 0 1 calc(25% - 10px);
+    margin-right: 10px;
+}
+
+.btn {
+    cursor: pointer;
+    border: none;
+    border-radius: 15px;
+    padding: 15px;
+    font-size: 20px;
+    color: #333;
+}
