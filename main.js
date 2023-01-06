@@ -3,6 +3,13 @@
     const wrapper = document.createElement('div');
     wrapper.classList.add('card-wrapper');
     const button = createButton();
+    const arrayWithCardsText = [];
+    const arrayWithCards = [];
+    const arrayCounter = [];
+    const moreArrays = [];
+
+    const timer = createTimer().createTimer;
+    let counter = createTimer().counter;
 
     let shuffleNumbers = function (arr) {
         for (let i = arr.length - 1; i > 0; i--) {
@@ -15,11 +22,17 @@
         return arr;
     };
 
-    function createCards(wrapper) {
-        const arrayWithCardsText = [];
-        const arrayWithCards = [];
-        const arrayCounter = [];
-        const moreArrays = [];
+    function createCards() {
+
+        timer.textContent = '60';
+        const countTimer = setInterval(() => {
+            --counter;
+            timer.textContent = counter;
+            if (counter <= 0) {
+                clearInterval(countTimer);
+            }
+        }, 1000);
+
         for (let i = 0; i < (numbers.length); ++i) {
             const card = document.createElement('button');
             wrapper.append(card);
@@ -48,16 +61,38 @@
                 }
                 if (arrayCounter.length == 8) {
                     wrapper.append(button);
+                    clearInterval(countTimer);
                     button.addEventListener('click', () => {
                         for (const value of moreArrays) {
                             value.textContent = '';
                             value.removeAttribute('disabled');
-                            button.remove();
                         }
                     });
                 }
             });
         }
+        button.addEventListener('click', () => {
+            button.remove();
+            arrayCounter.length = 0;
+            counter = 60;
+            setInterval(() => {
+                --counter;
+                timer.textContent = counter;
+                if (counter <= 0) {
+                    clearInterval(countTimer);
+                }
+            }, 1000)
+        });
+    }
+
+    function createTimer() {
+        let counter = 60;
+        const createTimer = document.createElement('div');
+        createTimer.classList.add('timer');
+        return {
+            createTimer,
+            counter
+        };
     }
 
     function createButton() {
@@ -70,6 +105,7 @@
     document.addEventListener('DOMContentLoaded', () => {
         document.body.append(wrapper);
         shuffleNumbers(numbers);
-        createCards(wrapper);
+        createCards();
+        document.body.prepend(timer);
     });
 })();
