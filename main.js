@@ -3,10 +3,10 @@
     const wrapper = document.createElement('div');
     wrapper.classList.add('card-wrapper');
     const button = createButton();
+
     const arrayWithCardsText = [];
     const arrayWithCards = [];
     const arrayCounter = [];
-    const moreArrays = [];
 
     const timer = createTimer().createTimer;
     let counter = createTimer().counter;
@@ -24,19 +24,23 @@
 
     function createCards() {
 
-        timer.textContent = '60';
-        const countTimer = setInterval(() => {
-            --counter;
-            timer.textContent = counter;
-            if (counter <= 0) {
-                clearInterval(countTimer);
-            }
-        }, 1000);
-
         for (let i = 0; i < (numbers.length); ++i) {
+
             const card = document.createElement('button');
             wrapper.append(card);
             card.classList.add('card');
+
+            const countTimer = setInterval(() => {
+                counter -= 0.0625;
+                timer.textContent = Math.ceil(counter);
+                if (counter <= 0) {
+                    wrapper.append(button);
+                    clearInterval(countTimer);
+
+                    card.setAttribute('disabled', 'disabled');
+                }
+            }, 100);
+
             card.addEventListener('click', (elem) => {
                 card.textContent = numbers[i];
                 arrayWithCardsText.push(elem.target.textContent);
@@ -52,9 +56,6 @@
                         arrayWithCards.length = 0;
                     }
                 }
-                if (card.textContent != '') {
-                    moreArrays.push(card);
-                }
                 if (arrayWithCardsText.length == 2) {
                     arrayWithCardsText.length = 0;
                     arrayCounter.push(true);
@@ -62,27 +63,27 @@
                 if (arrayCounter.length == 8) {
                     wrapper.append(button);
                     clearInterval(countTimer);
-                    button.addEventListener('click', () => {
-                        for (const value of moreArrays) {
-                            value.textContent = '';
-                            value.removeAttribute('disabled');
-                        }
-                    });
                 }
             });
+            button.addEventListener('click', () => {
+                card.removeAttribute('disabled');
+                card.textContent = '';
+                button.remove();
+                arrayCounter.length = 0;
+                counter = 60;
+                shuffleNumbers(numbers);
+                const counterTimer = setInterval(() => {
+                    counter -= 0.0625;
+                    timer.textContent = Math.ceil(counter);
+                    if (counter <= 0) {
+                        wrapper.append(button);
+                        clearInterval(counterTimer);
+
+                        card.setAttribute('disabled', 'disabled');
+                    }
+                }, 100);
+            });
         }
-        button.addEventListener('click', () => {
-            button.remove();
-            arrayCounter.length = 0;
-            counter = 60;
-            setInterval(() => {
-                --counter;
-                timer.textContent = counter;
-                if (counter <= 0) {
-                    clearInterval(countTimer);
-                }
-            }, 1000)
-        });
     }
 
     function createTimer() {
@@ -107,5 +108,6 @@
         shuffleNumbers(numbers);
         createCards();
         document.body.prepend(timer);
+        timer.textContent = 60;
     });
 })();
