@@ -36,10 +36,12 @@
                 if (counter <= 0) {
                     wrapper.append(button);
                     clearInterval(countTimer);
-
                     card.setAttribute('disabled', 'disabled');
                 }
-            }, 100);
+                if (arrayCounter.length == 8) {
+                    clearInterval(countTimer);
+                }
+            }, 1000);
 
             card.addEventListener('click', (elem) => {
                 card.textContent = numbers[i];
@@ -63,6 +65,7 @@
                 if (arrayCounter.length == 8) {
                     wrapper.append(button);
                     clearInterval(countTimer);
+                    console.log(arrayCounter);
                 }
             });
             button.addEventListener('click', () => {
@@ -78,10 +81,12 @@
                     if (counter <= 0) {
                         wrapper.append(button);
                         clearInterval(counterTimer);
-
                         card.setAttribute('disabled', 'disabled');
                     }
-                }, 100);
+                    if (arrayCounter.length == 8) {
+                        clearInterval(counterTimer);
+                    }
+                }, 1000);
             });
         }
     }
@@ -103,11 +108,55 @@
         return createdButton;
     }
 
+    function createForm() {
+        const form = document.createElement('form');
+        form.classList.add('form');
+        const formButton = document.createElement('button');
+        formButton.classList.add('form__button');
+        formButton.textContent = 'start the game';
+        const formWrapper = document.createElement('div');
+        formWrapper.classList.add('form__wrapper');
+        const horizontalInput = document.createElement('input');
+        horizontalInput.classList.add('form__input');
+        horizontalInput.setAttribute('placeholder', 'enter a number of horizontal cards');
+        const verticalInput = document.createElement('input');
+        verticalInput.classList.add('form__input');
+        verticalInput.setAttribute('placeholder', 'enter a number of vertical cards');
+        return {
+            form,
+            formButton,
+            formWrapper,
+            horizontalInput,
+            verticalInput
+        };
+    }
+
+    function loadForm() {
+        const form = createForm().form;
+        const formButton = createForm().formButton;
+        const formWrapper = createForm().formWrapper;
+        const horizontalInput = createForm().horizontalInput;
+        const verticalInput = createForm().verticalInput;
+        document.body.append(formWrapper);
+        formWrapper.append(form);
+        form.append(horizontalInput, verticalInput, formButton);
+
+        formButton.addEventListener('click', () => {
+            formWrapper.remove();
+            document.body.append(wrapper);
+            shuffleNumbers(numbers);
+            createCards();
+            document.body.prepend(timer);
+            timer.textContent = 60;
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
-        document.body.append(wrapper);
-        shuffleNumbers(numbers);
-        createCards();
-        document.body.prepend(timer);
-        timer.textContent = 60;
+        // document.body.append(wrapper);
+        // shuffleNumbers(numbers);
+        // createCards();
+        // document.body.prepend(timer);
+        // timer.textContent = 60;
+        loadForm();
     });
 })();
