@@ -92,6 +92,11 @@
                     }
                 }, 1000);
             });
+            changeButton.addEventListener('click', () => {
+                card.removeAttribute('disabled');
+                card.textContent = '';
+                card.remove();
+            });
         }
         changeButton.addEventListener('click', () => {
             location.reload();
