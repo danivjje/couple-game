@@ -1,12 +1,15 @@
 (() => {
-    const numbers = ['1', '1', '2', '2', '3', '3', '4', '4', '5', '5', '6', '6', '7', '7', '8', '8'];
+    const numbers = [];
     const wrapper = document.createElement('div');
-    wrapper.classList.add('card-wrapper');
     const button = createButton();
+    const changeButton = createChangeButton();
+    wrapper.classList.add('card-wrapper');
 
     const arrayWithCardsText = [];
     const arrayWithCards = [];
     const arrayCounter = [];
+
+    let reriteHorizontal;
 
     const timer = createTimer().createTimer;
     let counter = createTimer().counter;
@@ -29,16 +32,17 @@
             const card = document.createElement('button');
             wrapper.append(card);
             card.classList.add('card');
+            card.style.flexBasis = `${100 / reriteHorizontal - 1}%`;
 
             const countTimer = setInterval(() => {
-                counter -= 0.0625;
+                counter -= 1 / numbers.length;
                 timer.textContent = Math.ceil(counter);
                 if (counter <= 0) {
                     wrapper.append(button);
                     clearInterval(countTimer);
                     card.setAttribute('disabled', 'disabled');
                 }
-                if (arrayCounter.length == 8) {
+                if (arrayCounter.length == numbers.length / 2) {
                     clearInterval(countTimer);
                 }
             }, 1000);
@@ -62,10 +66,10 @@
                     arrayWithCardsText.length = 0;
                     arrayCounter.push(true);
                 }
-                if (arrayCounter.length == 8) {
+                if (arrayCounter.length == numbers.length / 2) {
                     wrapper.append(button);
+                    wrapper.append(changeButton);
                     clearInterval(countTimer);
-                    console.log(arrayCounter);
                 }
             });
             button.addEventListener('click', () => {
@@ -76,19 +80,22 @@
                 counter = 60;
                 shuffleNumbers(numbers);
                 const counterTimer = setInterval(() => {
-                    counter -= 0.0625;
+                    counter -= 1 / numbers.length;
                     timer.textContent = Math.ceil(counter);
                     if (counter <= 0) {
                         wrapper.append(button);
                         clearInterval(counterTimer);
                         card.setAttribute('disabled', 'disabled');
                     }
-                    if (arrayCounter.length == 8) {
+                    if (arrayCounter.length == numbers.length / 2) {
                         clearInterval(counterTimer);
                     }
                 }, 1000);
             });
         }
+        changeButton.addEventListener('click', () => {
+            location.reload();
+        });
     }
 
     function createTimer() {
@@ -108,6 +115,13 @@
         return createdButton;
     }
 
+    function createChangeButton() {
+        const changeButton = document.createElement('button');
+        changeButton.innerHTML = 'Change numbers?';
+        changeButton.classList.add('change-button');
+        return changeButton;
+    }
+
     function createForm() {
         const form = document.createElement('form');
         form.classList.add('form');
@@ -119,15 +133,21 @@
         const horizontalInput = document.createElement('input');
         horizontalInput.classList.add('form__input');
         horizontalInput.setAttribute('placeholder', 'enter a number of horizontal cards');
+        horizontalInput.setAttribute('required', 'required');
         const verticalInput = document.createElement('input');
         verticalInput.classList.add('form__input');
         verticalInput.setAttribute('placeholder', 'enter a number of vertical cards');
+        verticalInput.setAttribute('required', 'required');
+        const h1 = document.createElement('h1');
+        h1.classList.add('form__title');
+        h1.textContent = 'Числа должны быть чётными, не меньше 2 и не больше 10 (включительно)';
         return {
             form,
             formButton,
             formWrapper,
             horizontalInput,
-            verticalInput
+            verticalInput,
+            h1
         };
     }
 
@@ -137,26 +157,34 @@
         const formWrapper = createForm().formWrapper;
         const horizontalInput = createForm().horizontalInput;
         const verticalInput = createForm().verticalInput;
+        const h1 = createForm().h1;
         document.body.append(formWrapper);
         formWrapper.append(form);
         form.append(horizontalInput, verticalInput, formButton);
+        form.prepend(h1);
 
         formButton.addEventListener('click', () => {
-            formWrapper.remove();
-            document.body.append(wrapper);
-            shuffleNumbers(numbers);
-            createCards();
-            document.body.prepend(timer);
-            timer.textContent = 60;
+            if (horizontalInput.value >= 2 && horizontalInput.value <= 10 && horizontalInput.value % 2 == 0 &&
+                verticalInput.value >= 2 && verticalInput.value <= 10 && verticalInput.value % 2 == 0) {
+                reriteHorizontal = horizontalInput.value;
+                const amountOfNumbers = (parseInt(horizontalInput.value) * parseInt(verticalInput.value)) / 2;
+                for (let i = 0; i < 2; ++i) {
+                    for (let i = 1; i <= amountOfNumbers; ++i) {
+                        numbers.push(i);
+                    }
+                }
+                formWrapper.remove();
+                document.body.append(wrapper);
+                shuffleNumbers(numbers);
+                createCards();
+                document.body.prepend(timer);
+                counter = 60;
+                timer.textContent = '60';
+            }
         });
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-        // document.body.append(wrapper);
-        // shuffleNumbers(numbers);
-        // createCards();
-        // document.body.prepend(timer);
-        // timer.textContent = 60;
         loadForm();
     });
 })();

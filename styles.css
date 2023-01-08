@@ -8,7 +8,7 @@
     flex-wrap: wrap;
     justify-content: center;
     margin: 20px auto;
-    width: 60%;
+    width: 100%;
 }
 
 .card {
@@ -19,28 +19,32 @@
     border-radius: 25px;
     background-color: brown;
     display: flex;
-    flex-basis: 25%;
+    flex-shrink: 0;
+    flex-grow: 0;
     justify-content: center;
     align-items: center;
     color: aliceblue;
     font-family: sans-serif;
-    font-size: 120px;
+    font-size: 100px;
     font-weight: 600;
     transition: transform 100ms ease-in-out;
+    margin: 2px;
 }
 
-.card:not(:nth-child(4n)) {
-    flex: 0 1 calc(25% - 10px);
-    margin-right: 10px;
-}
-
-.btn {
+.btn,
+.change-button {
     cursor: pointer;
     border: none;
     border-radius: 15px;
     padding: 15px;
     font-size: 20px;
     color: #333;
+    margin: 25px 0;
+    display: block;
+}
+
+.change-button {
+    margin-left: 25px;
 }
 
 .timer {
@@ -55,7 +59,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 70%;
+    width: 100%;
     margin: 0 auto;
 }
 
@@ -93,4 +97,12 @@
     border: 1px solid #333;
     cursor: pointer;
     padding: 10px;
+}
+
+.form__title {
+    font-size: 25px;
+    font-weight: 500;
+    font-family: sans-serif;
+    text-align: center;
+    margin-bottom: 25px;
 }
