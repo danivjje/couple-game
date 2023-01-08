@@ -110,7 +110,7 @@
 
     function createButton() {
         const createdButton = document.createElement('button');
-        createdButton.innerHTML = 'Congratulations! Retry?';
+        createdButton.innerHTML = 'Retry?';
         createdButton.classList.add('btn');
         return createdButton;
     }
@@ -163,7 +163,11 @@
         form.append(horizontalInput, verticalInput, formButton);
         form.prepend(h1);
 
-        formButton.addEventListener('click', () => {
+        horizontalInput.value = '4';
+        verticalInput.value = '4';
+
+        formButton.addEventListener('click', (e) => {
+            e.preventDefault();
             if (horizontalInput.value >= 2 && horizontalInput.value <= 10 && horizontalInput.value % 2 == 0 &&
                 verticalInput.value >= 2 && verticalInput.value <= 10 && verticalInput.value % 2 == 0) {
                 reriteHorizontal = horizontalInput.value;
@@ -180,6 +184,12 @@
                 document.body.prepend(timer);
                 counter = 60;
                 timer.textContent = '60';
+            }
+            if (verticalInput.value % 2 == 1 || verticalInput.value > 10 || verticalInput.value < 2) {
+                verticalInput.value = '4';
+            }
+            if (horizontalInput.value % 2 == 1 || horizontalInput.value < 2 || horizontalInput.value > 10) {
+                horizontalInput.value = '4';
             }
         });
     }
