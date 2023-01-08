@@ -92,6 +92,11 @@
                     }
                 }, 1000);
             });
+            changeButton.addEventListener('click', () => {
+                card.removeAttribute('disabled');
+                card.textContent = '';
+                card.remove();
+            });
         }
         changeButton.addEventListener('click', () => {
             location.reload();
@@ -110,7 +115,7 @@
 
     function createButton() {
         const createdButton = document.createElement('button');
-        createdButton.innerHTML = 'Congratulations! Retry?';
+        createdButton.innerHTML = 'Retry?';
         createdButton.classList.add('btn');
         return createdButton;
     }
